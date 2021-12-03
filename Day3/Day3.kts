@@ -3,7 +3,7 @@ import java.io.File
 
 val numbers: List<String> = File("input.txt").readLines()
 
-fun parseintolines(input:List<String>)
+fun part1(input:List<String>)
 {
 
     fun intArray(str:String):List<Int> = str.map{ it.toString().toInt()}
@@ -38,15 +38,4 @@ fun parseintolines(input:List<String>)
     return
 }
 
-
-
-/*
-fun part1(): {
-    parseintolines()
-}
-
-fun part2(){
-
-}*/
-
-parseintolines(numbers)
+part1(numbers)
