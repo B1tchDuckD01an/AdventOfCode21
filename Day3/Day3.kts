@@ -5,25 +5,20 @@ val numbers: List<String> = File("input.txt").readLines()
 
 fun part1(input:List<String>)
 {
-
     fun intArray(str:String):List<Int> = str.map{ it.toString().toInt()}
 
     fun gamma(list:List<Int>):List<Int> = list.map {
-        if( it > input.size/2 )
-               1
-        else
-        0
+        if( it > input.size/2 ) 1
+        else 0
     }
 
     fun epsilon(list:List<Int>):List<Int> = list.map {
-        if( it  < input.size/2 )
-                1
-        el  se
-            0
-
+        if( it  < input.size/2 ) 1
+        else 0
     }
     val inputmap = (0 until input.size).map { i ->
-    intArray(input[i]) }.foldIndexed(mutableListOf<Int>(),{ index, acc, list ->
+    intArray(input[i])
+    }.foldIndexed(mutableListOf<Int>(),{ index, acc, list ->
         list.mapIndexed {
             inx, i ->
                 if(index > 0)
