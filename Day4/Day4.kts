@@ -1,4 +1,3 @@
-import java.io.BufferedOutputStream
 import java.io.File
 
 val numbers = File("input.txt").readLines().toMutableList()
@@ -64,7 +63,7 @@ fun createboards(input:MutableList<String>):MutableList<Board>
     return boards
 }
 
-fun makebingo(str:String,iter:Int):MutableList<Bingo> = str.split(" ".toRegex())
+fun makebingo(str:String,iter:Int):MutableList<Bingo> = str.split(" ")
         .filterNot(String::isBlank)
         .mapIndexed { index, s -> Bingo(index,iter,s.toInt(),false)}.toMutableList()
 
