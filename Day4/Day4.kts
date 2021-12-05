@@ -1,24 +1,17 @@
+import java.io.BufferedOutputStream
 import java.io.File
 
 val numbers = File("input.txt").readLines().toMutableList()
-
 val balls = numbers.removeFirst()
-println(balls)
 
-//createboards(numbers)
 class Bingo(val x:Int,val y:Int,val number:Int,var marked:Boolean)
-{
-    fun markball(value:Boolean)
-    {
-        marked = value
-    }
-}
 
-class Board(var ball:MutableList<Bingo>, var winner:Boolean)
+class Board(var ball:MutableList<Bingo>)
 {
+
     fun printBingoBoard()
     {
-        println("BingoBoard ")
+        println("")
         var i = 0
         do {
             for(bingo in ball.filter {it.x == i})
@@ -26,14 +19,13 @@ class Board(var ball:MutableList<Bingo>, var winner:Boolean)
                 print(bingo.x)
                 print(",")
                 print(bingo.y)
-                print(":")
+                print("   ")
                 print(bingo.number)
-                print("  ")
+                print("    ")
             }
             println("")
             i++
         }while(i<=4)
-
     }
 
     fun addBingo(bin:Bingo)
@@ -41,39 +33,28 @@ class Board(var ball:MutableList<Bingo>, var winner:Boolean)
         ball.add(bin)
     }
 
-    fun markballs(value:Int)
-    {
-        for(bingo in ball)
-            if(bingo.number == value)
-                bingo.markball(true)
-                checkwinners()
+    fun verticalmatch() = ball.groupBy { it.y }.any { (_, value) -> value.all(Bingo::marked) }
+    fun horizontalmatch() = ball.groupBy { it.x }.any { (_, value) -> value.all(Bingo::marked) }
 
-    }
-    fun checkwinners() {
-        if ((0 until 4).map { iterator ->
-                    ball.filter { it.marked == true }.filter { it.x == iterator }.count() == 5
-                }.contains(true))
-            winner = true
-    }
+    fun haswon() = horizontalmatch() || verticalmatch()
 
     fun sumofunmarked() = ball.filter { it.marked == false }.sumOf { it.number }
-
+    fun score(value:Int) = sumofunmarked() * value
 }
 
 fun createboards(input:MutableList<String>):MutableList<Board>
 {
-    var iter = 0
-    var currentBoard = Board(mutableListOf<Bingo>(),false)
+    var currentBoard = Board(mutableListOf<Bingo>())
     val boards = mutableListOf<Board>()
-
+    var iter = 0
     do {
         val taken = input.removeFirst()
         if (taken == "") {
             iter = 0
-            if(currentBoard.ball.size > 0)
+            if(currentBoard.ball.size > 0) {
                 boards.add(currentBoard)
-
-            currentBoard = Board(mutableListOf<Bingo>(),false)
+                currentBoard = Board(mutableListOf<Bingo>())
+            }
         }
         else
         {
@@ -84,19 +65,43 @@ fun createboards(input:MutableList<String>):MutableList<Board>
     }
     while(input.size != 0)
 
+    boards.add(currentBoard)
     return boards
 }
 
-fun makebingo(str:String,iter:Int):MutableList<Bingo> = str.split("\\s+".toRegex())
-        .filter { it != ""}
+fun makebingo(str:String,iter:Int):MutableList<Bingo> = str.split(" ".toRegex())
+        .filterNot(String::isBlank)
         .mapIndexed { index, s -> Bingo(index,iter,s.toInt(),false)}.toMutableList()
 
-fun playbingo(boards:MutableList<Board>,numbers:List<Int>):Pair<Int,Board>
+fun playbingo(boards:MutableList<Board>,numbers:List<Int>)
 {
     for (number in numbers) {
         for (board in boards) {
-            board.markballs(number)
-            if(board.winner)
+            for (bingo in board.ball) {
+                if (bingo.number == number) {
+                    bingo.marked = true
+                }
+
+                if (boards.all(Board::haswon)) {
+                    print("----- PART2 -----")
+                    board.printBingoBoard()
+                    println(board.score(number))
+                    return
+                }
+            }
+        }
+    }
+}
+
+fun playbingopart1(boards:MutableList<Board>,numbers:List<Int>):Pair<Int,Board>
+{
+    for (number in numbers) {
+        for (board in boards) {
+            for(bingo in board.ball.filter {it.number==number})
+            {
+                bingo.marked = true
+            }
+            if(board.haswon())
             {
                 return Pair(number, board)
             }
@@ -106,22 +111,30 @@ fun playbingo(boards:MutableList<Board>,numbers:List<Int>):Pair<Int,Board>
     return Pair(-1,boards[0])
 }
 
-fun part1()
+fun resetgame(boards:MutableList<Board>)
 {
-    val winningboard = playbingo(createboards(numbers),balls.split(",").map{it.toInt()})
-    println("sum of winning is : ")
-    print(winningboard.second.sumofunmarked())
-    println("number is : ")
-    print(winningboard.first)
-    println("attempt of an answer : ")
-    print(winningboard.first * winningboard.second.sumofunmarked())
+    for (board in boards) {
+        for (bingo in board.ball.filter { it.marked == true }) {
+            bingo.marked = false
+        }
+    }
 }
 
-fun part2()
+fun part1(boards:MutableList<Board>)
 {
+    println("----- PART1 -------")
 
-
-
+    val winningboard = playbingopart1(boards,balls.split(",").map{it.toInt()})
+    winningboard.second.printBingoBoard()
+    println(winningboard.second.score(winningboard.first))
 }
 
-part1()
+fun part2(boards:MutableList<Board>)
+{
+    playbingo(boards,balls.split(",").map{it.toInt()})
+}
+
+var boards = createboards(numbers)
+part1(boards)
+resetgame(boards)
+part2(boards)
