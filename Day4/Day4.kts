@@ -28,11 +28,6 @@ class Board(var ball:MutableList<Bingo>)
         }while(i<=4)
     }
 
-    fun addBingo(bin:Bingo)
-    {
-        ball.add(bin)
-    }
-
     fun verticalmatch() = ball.groupBy { it.y }.any { (_, value) -> value.all(Bingo::marked) }
     fun horizontalmatch() = ball.groupBy { it.x }.any { (_, value) -> value.all(Bingo::marked) }
 
@@ -59,7 +54,7 @@ fun createboards(input:MutableList<String>):MutableList<Board>
         else
         {
             for(bingo in makebingo(taken,iter))
-                currentBoard.addBingo(bingo)
+                currentBoard.ball.add(bingo)
             iter++
         }
     }
@@ -107,8 +102,7 @@ fun playbingopart1(boards:MutableList<Board>,numbers:List<Int>):Pair<Int,Board>
             }
         }
     }
-
-    return Pair(-1,boards[0])
+    error("problems")
 }
 
 fun resetgame(boards:MutableList<Board>)
