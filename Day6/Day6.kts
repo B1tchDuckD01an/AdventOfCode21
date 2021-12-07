@@ -3,44 +3,34 @@ import java.util.*
 
 val numbers = File("input.txt").readText().split(",").map { it.toInt() }
 
-class Sea(var fish:MutableList<Long>) {
-    fun passDay() {
-        println(fish)
-
-        val newlist = mutableListOf<Long>()
-        newlist.addAll(fish)
-        Collections.rotate(newlist,-1)
-        newlist[6] += fish[0]
-        fish = newlist
-    }
+fun passDay(fish:MutableList<Long>):MutableList<Long> {
+    println(fish)
+    val newlist = mutableListOf<Long>()
+    newlist.addAll(fish)
+    Collections.rotate(newlist,-1)
+    newlist[6] += fish[0]
+    return newlist
 }
 
-fun createSea():Sea {
-
+fun createSea():MutableList<Long> {
     val stages = mutableListOf<Long>()
     for(i in 0..8)
     {
-        println("addimg for ")
-
         stages.add(i,numbers.count { it == i }.toLong())
     }
-
-    return Sea(stages)
-
+    return stages
 }
 
 fun fish() {
-
-    val a = createSea()
-
+    var a = createSea()
     for (i in 1..256) {
-            a.passDay()
+        a = passDay(a)
         if(i==80) {
             println("---- PART1 -----")
-            println(a.fish.sum())
+            println(a.sum())
         }
     }
     println("---- PART2 -----")
-    println(a.fish.sum())
+    println(a.sum())
 }
 fish()
