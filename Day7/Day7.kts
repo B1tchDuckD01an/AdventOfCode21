@@ -1,6 +1,4 @@
 import java.io.File
-import kotlin.math.absoluteValue
-
 val numbers = File("input.txt").readText().split(",").map { it.toInt() }
 
 fun fuelcost(i:Int,num:Int):Int = if (i > num) (i - num) else (num - i)
