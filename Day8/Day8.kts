@@ -1,6 +1,33 @@
 import java.io.File
+
+part1()
+part2()
+
 val numbers = File("input.txt").readLines()
+
 fun parsenumbers(num:List<String>) = num.map { it.split(" | ")}.map { Pair(it[0].split(" "),it[1].split(" "))}
+
+fun part2() {
+    var total = 0
+    for(item in parsenumbers(numbers))
+    {
+        val sub = SubNumbers(item.second, item.first)
+        total += sub.code
+    }
+    println("---- PART 2 -----")
+    println(total)
+}
+
+fun part1(){
+    var total = 0
+    for(item in parsenumbers(numbers))
+    {
+        val sub = SubNumbers(item.second, item.first)
+        total += sub.code.toString().toList().filter { listOf("1","4","7","8").contains(it.toString())}.count()
+    }
+    println("---- PART 1 -----")
+    println(total)
+}
 
 class SubNumbers(val signalentry:List<String>,val signalpattern:List<String>)
 {
@@ -40,25 +67,17 @@ class SubNumbers(val signalentry:List<String>,val signalpattern:List<String>)
         return thisnumber
     }
 
-        fun getcode(listofentries:MutableList<Pair<String,Int>>,listofnumbers:List<Int>):MutableList<Char> = listofentries
-                .filter { listofnumbers.contains(it.second) }
-            .map { it.first.toCharArray() }
-            .fold(mutableListOf<Char>(),{ acc, chars ->
-                for (char in chars)
-                    if(!acc.contains(char))
-                        acc.add(char)
-                acc
-            })
+    fun getcode(listofentries:MutableList<Pair<String,Int>>,num:Int):List<Char> =
+            listofentries.filter { it.second == num }.first().first.toList()
 
     fun getpatterns(thisnumber:MutableList<Pair<String, Int>>):List<Pair<String,Int>>
     {
         fun unknownvalues() = thisnumber.filter { it.second == -1}
-
         for(entry in unknownvalues())
         {
             val arr = entry.first.toList()
-            val one = getcode(thisnumber, listOf(1))
-            val four = getcode(thisnumber, listOf(4))
+            val one = getcode(thisnumber, 1)
+            val four = getcode(thisnumber, 4)
 
             // get 2,3,5
             if(arr.size == 5) {
@@ -87,43 +106,3 @@ class SubNumbers(val signalentry:List<String>,val signalpattern:List<String>)
         return thisnumber.filter { it.second != -1}
     }
 }
-
-fun createsubnumbers(thelist: List<Pair<List<String>,List<String>>>){
-    val sub = mutableListOf<SubNumbers>()
-    for(item in thelist)
-    {
-        sub.add(SubNumbers(item.second, item.first))
-    }
-    var total = 0
-    for (subNumbers in sub) {
-        subNumbers.getcommonnumber()
-        total += subNumbers.code
-    }
-    println("---- PART 2 -----")
-
-    println(total)
-}
-
-fun part2() {
-    val listofpatterns = parsenumbers(numbers)
-    createsubnumbers(listofpatterns)
-}
-
-fun part1(){
-    val listofpatterns = parsenumbers(numbers)
-    val sub = mutableListOf<SubNumbers>()
-    for(item in listofpatterns)
-    {
-        sub.add(SubNumbers(item.second, item.first))
-    }
-    var total = 0
-    for (subNumbers in sub) {
-        subNumbers.getcommonnumber()
-        total += subNumbers.code.toString().toList().filter { listOf("1","4","7","8").contains(it.toString())}.count()
-    }
-    println("---- PART 1 -----")
-    println(total)
-}
-
-part1()
-part2()
