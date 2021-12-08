@@ -1,9 +1,8 @@
 import java.io.File
+val numbers = File("input.txt").readLines()
 
 part1()
 part2()
-
-val numbers = File("input.txt").readLines()
 
 fun parsenumbers(num:List<String>) = num.map { it.split(" | ")}.map { Pair(it[0].split(" "),it[1].split(" "))}
 
@@ -31,8 +30,7 @@ fun part1(){
 
 class SubNumbers(val signalentry:List<String>,val signalpattern:List<String>)
 {
-    var cipher = getpatterns(getcommonnumber())
-    var code = decipher(cipher.toList())
+    val code = decipher(getCipher().toList())
 
     fun decipher(list:List<Pair<String,Int>>):Int {
         val sb = StringBuilder()
@@ -48,8 +46,13 @@ class SubNumbers(val signalentry:List<String>,val signalpattern:List<String>)
     }
 
     //determine signal pattern
-    fun getcommonnumber():MutableList<Pair<String,Int>> {
+    fun getCipher():MutableList<Pair<String,Int>> {
         val thisnumber = mutableListOf<Pair<String, Int>>()
+
+        fun getcode(listofentries:MutableList<Pair<String,Int>>,num:Int):List<Char> =
+                listofentries.filter { it.second == num }.first().first.toList()
+
+        fun unknownvalues() = thisnumber.filter { it.second == -1}
 
         //Find unique numbers first
         signalpattern.forEachIndexed { index, s ->
@@ -63,16 +66,8 @@ class SubNumbers(val signalentry:List<String>,val signalpattern:List<String>)
                 thisnumber.add(index, Pair(s, 4))
             else
                 thisnumber.add(index, Pair(s, -1))
-        }
-        return thisnumber
-    }
+            }
 
-    fun getcode(listofentries:MutableList<Pair<String,Int>>,num:Int):List<Char> =
-            listofentries.filter { it.second == num }.first().first.toList()
-
-    fun getpatterns(thisnumber:MutableList<Pair<String, Int>>):List<Pair<String,Int>>
-    {
-        fun unknownvalues() = thisnumber.filter { it.second == -1}
         for(entry in unknownvalues())
         {
             val arr = entry.first.toList()
@@ -103,6 +98,6 @@ class SubNumbers(val signalentry:List<String>,val signalpattern:List<String>)
                     thisnumber.add(Pair(entry.first, 6))
             }
         }
-        return thisnumber.filter { it.second != -1}
+        return thisnumber.filter { it.second != -1}.toMutableList()
     }
 }
