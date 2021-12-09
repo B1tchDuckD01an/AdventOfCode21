@@ -6,16 +6,8 @@ val numbers = File("input.txt").readLines().map { it.map { Character.getNumericV
 class Point(val x:Int,val y:Int, val value:Int)
 {
     var visited = false
-
     fun basinEdge() = value==9
     fun isLowest(otherpoints:List<Point>) = otherpoints.filter { it.value < this.value }.count() == 0
-    override fun toString():String
-    {
-        val sb = StringBuilder()
-        sb.append("\n $x,$y ")
-        sb.append("value: $value")
-        return sb.toString()
-    }
 }
 
 class Heatmap(val points:List<Point>)
@@ -83,5 +75,4 @@ fun part2()
 }
 
 part1()
-
 part2()
