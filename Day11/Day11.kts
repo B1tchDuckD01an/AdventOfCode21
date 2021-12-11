@@ -4,11 +4,9 @@ val numbers = File("input.txt").readLines()
 
 class Octo(val x: Int, val y: Int, var energy: Int, var flashed: Boolean)
 
-var octoarray = numbers.mapIndexed { y, s ->
-    s.mapIndexed { x, c ->
-        Octo(x, y, Character.getNumericValue(c), false)
-    }
-}.fold(mutableListOf<Octo>(), { acc, list ->
+var octoarray = numbers.mapIndexed { y, s -> s.mapIndexed { x, c ->
+    Octo(x, y, Character.getNumericValue(c), false)
+    }}.fold(mutableListOf<Octo>(), { acc, list ->
     acc.addAll(list)
     acc
 })
@@ -22,7 +20,8 @@ fun printoctoarray() {
     println()
 }
 
-fun withinAllRange(pt: Octo) = octoarray.filter { listOf(pt.x - 1, pt.x, pt.x + 1).contains(it.x) && listOf(pt.y - 1, pt.y, pt.y + 1).contains(it.y) }
+fun withinAllRange(pt: Octo) = octoarray.filter { listOf(pt.x - 1, pt.x, pt.x + 1).contains(it.x)
+                                                && listOf(pt.y - 1, pt.y, pt.y + 1).contains(it.y) }
 
 fun flashingoctopus(pt: Octo) {
     pt.energy = 0
@@ -73,7 +72,6 @@ fun part2() {
     println("---- PART 2 -----")
     println("synchronised flash on $i ")
 }
-
 
 part2()
 
