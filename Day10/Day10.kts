@@ -52,32 +52,4 @@ fun part1() {
 }
 
 part1()
-/*
-    numbers.forEachIndexed { line, list ->
-        list.forEachIndexed { i, symbol ->
-            if(symbol.open) {
-                var chunkindex = 0
-                list.forEachIndexed { findindex, symbol ->
-                    if (!symbol.open && chunkindex == 0) {
-                        chunkindex = findindex
-                    }
-                }
-                println(i+chunkindex-1)
-                if(i+chunkindex-1 < list.size) {
-                    if (symbol.ispartner(list[i + chunkindex - 1].c)) {
-                        println(symbol)
-                    } else
-                    {
-                        if(openlist.filter{ it.first == i}.count() == 0)
-                            openlist.add(Pair(i,list[i + chunkindex - 1]))
-                    }
-                }
-            }
-        }
-    }
-println(openlist)
-
-}
-
-part1()
 
