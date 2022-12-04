@@ -56,6 +56,7 @@ fun scores() {
             allscores.add(score2)
         }
     }
+
     println("---- PART1 -----")
     println(score)
 

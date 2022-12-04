@@ -1,37 +1,65 @@
 import java.io.File
+import java.lang.StringBuilder
 
-val numbers = File("input.txt").readLines().map { intArray(it) }
-
+val numbers = File("test.txt").readLines().map { intArray(it) }
+/*
 fun gamma(list:List<Int>,size:Int):List<Int> = list.map {
-    if( it >= size/2 ) 1
+    if( it >= Math.abs(size/2) ) 1
     else 0
 }
 
 fun epsilon(list:List<Int>,size:Int):List<Int> = list.map {
-    if( it  <= size/2 ) 1
+    if( it  <= Math.abs(size/2 )) 1
     else 0
 }
+*/
 
 fun intArray(str:String):List<Int> = str.map{ it.toString().toInt()}
-
+/*
 fun recurse(listin:List<List<Int>>,a:Boolean):List<Int> {
-    fun iterate(iter: Int, input: List<List<Int>>, compare: List<Int>): List<List<Int>> = input.filter() { it -> it[iter] == compare[iter] }
+    fun iterate(iter: Int, input: List<List<Int>>, compare: List<Int>,boolean: Boolean): List<List<Int>> = input.filter() { it -> it[iter] != compare[iter]}
+
     var list = listin
     var iter = 0
     do {
         if(a==true)
-            list = iterate(iter, list, epsilon(countof1(list), list.size))
+            list = iterate(iter, list, epsilon(countof1(list), list.size),a)
         else
-            list = iterate(iter, list, gamma(countof1(list), list.size))
+            list = iterate(iter, list, gamma(countof1(list), list.size),a)
         iter++
     }while(list.size > 1)
     return list[0]
 }
+*/
+fun newpart1()
+{
 
+    var commonlist = mutableListOf<String>()
+    for(i in 0 .. numbers[0].size-1) {
+        var binarylist = mutableListOf<Int>()
+        var sb = StringBuilder()
+
+        for (each in 0..numbers.size-1) {
+            binarylist.add(numbers[each][i])
+        }
+       for(int in binarylist) {
+           sb.append(int.toString())
+       }
+        commonlist.add(sb.toString())
+        
+    }
+    println(commonlist)
+}
+
+newpart1()
+
+/*
 fun part2(input:List<List<Int>>)
 {
-   println(recurse(input,true).joinToString("").toInt(2) *
-           recurse(input,false).joinToString("").toInt(2))
+    println("O2 :")
+   println(recurse(input,true).joinToString("").toInt(2))
+    println("Scrubber :")
+    println(recurse(input,false).joinToString("").toInt(2))
 }
 
 fun part1(input:List<List<Int>>)
@@ -51,5 +79,7 @@ fun countof1(input:List<List<Int>>):List<Int> = input.foldIndexed(mutableListOf<
     acc
 }).toList()
 
-part1(numbers)
-part2(numbers)
+//part1(numbers)
+//part2(numbers)
+
+newpart1()

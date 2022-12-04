@@ -7,24 +7,14 @@ val numbers = File("input.txt").readLines().map {
 }
 
 fun part2(input:List<Pair<String,Int>>){
-    fun traverse(position:Pair<Int,Int>,aimin:Int,command:Pair<String,Int>):Pair<Pair<Int,Int>,Int> {
-        var depth = position.second
-        var horizontal = position.first
-        var aim = aimin
+    fun traverse(position:Pair<Int,Int>,aim:Int,command:Pair<String,Int>):Pair<Pair<Int,Int>,Int> {
         if (command.first == "forward")
-        {
-            horizontal = position.first + command.second
-            depth = depth + (aim * command.second)
-            }
-        if (command.first == "down") {
-           // depth = position.second + command.second
-            aim = aim + command.second
-        }
-        if (command.first == "up") {
-           // depth = position.second - command.second
-            aim = aim - command.second
-        }
-        return Pair(Pair(horizontal,depth),aim)
+            return(Pair(position.first + command.second,position.second , aim * command.second),aim)
+        if (command.first == "down")
+            return Pair(position,aim+command.second)
+        if (command.first == "up")
+            return Pair(position,aim-command.second)
+        return Pair(position,aim)
     }
     var position = Pair(0,0)
     var aim = 0
